@@ -1,0 +1,19 @@
+# Project Context & Tech Stack
+- Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS
+- Backend/CMS: Payload CMS v3
+- Database: PostgreSQL (Docker)
+
+# Coding Standards & Guidelines
+- Always use strict TypeScript types. Avoid using 'any' type at all costs.
+- Follow Next.js App Router conventions (properly separate Server and Client components, use 'use client' explicitly when hooks or browser APIs are needed).
+- Write modular, clean, and production-ready code.
+- When creating Payload CMS collections or globals, use Payload v3 syntax and best practices.
+
+# Communication Style
+- Be concise and direct. Skip unnecessary explanations unless asked.
+- Provide complete code blocks without skipping parts with comments like "// add rest of the code here" when possible.
+
+# Strict Behavioral Rules
+- **Strict Adherence:** Follow prompts and instructions precisely. Do not invent, assume, or add unrequested features, styles, or code blocks.
+- **Clarification First:** If any requirement, schema field, or logic is ambiguous or missing, STOP and ask a direct clarifying question before writing code.
+- **No Hallucinations:** Never invent Payload CMS or Next.js APIs. Stick strictly to the official documentation and discussed architecture.

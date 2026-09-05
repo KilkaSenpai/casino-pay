@@ -1,67 +1,147 @@
-# Payload Blank Template
+# casino-pay
 
-This template comes configured with the bare minimum to get started on anything you need.
+Payment-focused app built with **Next.js (App Router)** and **Payload CMS v3**, using **PostgreSQL** as the database.
 
-## Quick start
+- Frontend: Next.js, React, TypeScript, Tailwind CSS
+- CMS / admin: Payload CMS v3 (`/admin`)
+- Database: PostgreSQL (local via Docker)
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Requirements
 
-## Quick Start - local setup
+- [Node.js](https://nodejs.org/) `^18.20.2` or `>=20.9.0`
+- [npm](https://docs.npmjs.com/) (this repo includes `package-lock.json`) or [pnpm](https://pnpm.io/) `^9+`
+- [Docker](https://docs.docker.com/get-docker/) and Docker Compose (for PostgreSQL)
 
-To spin up this template locally, follow these steps:
+## 1. Clone the repository
 
-### Clone
+```bash
+git clone https://github.com/KilkaSenpai/casino-pay.git
+cd casino-pay
+```
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+## 2. Configure environment variables
 
-### Development
+Copy the example file and edit values if needed:
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+```bash
+cp .env.example .env
+```
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+On Windows PowerShell:
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+```powershell
+Copy-Item .env.example .env
+```
 
-#### Docker (Optional)
+Required variables:
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+| Variable | Purpose | Local default |
+| --- | --- | --- |
+| `DATABASE_URL` | PostgreSQL connection string for Payload | `postgresql://postgres:postgres@127.0.0.1:5432/casino_pay` |
+| `PAYLOAD_SECRET` | Payload auth / encryption secret | Change this before deploying |
 
-To do so, follow these steps:
+Never commit `.env`. `.env.example` is the only env file that should be shared.
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+## 3. Start PostgreSQL with Docker
 
-## How it works
+From the project root:
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+```bash
+docker compose up -d
+```
 
-### Collections
+This starts Postgres 16 on port `5432` with:
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+- user: `postgres`
+- password: `postgres`
+- database: `casino_pay`
 
-- #### Users (Authentication)
+Check that the container is healthy:
 
-  Users are auth-enabled collections that have access to the admin panel.
+```bash
+docker compose ps
+```
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+Stop the database when you are done:
 
-- #### Media
+```bash
+docker compose down
+```
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+Data is stored in the `pgdata` Docker volume. To wipe the database:
 
-### Docker
+```bash
+docker compose down -v
+```
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+## 4. Install dependencies
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+```bash
+npm install
+```
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+If you prefer pnpm:
 
-## Questions
+```bash
+pnpm install
+```
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+## 5. Start the development server
+
+```bash
+npm run dev
+```
+
+or
+
+```bash
+pnpm dev
+```
+
+Then open:
+
+- App: [http://localhost:3000](http://localhost:3000)
+- Payload admin: [http://localhost:3000/admin](http://localhost:3000/admin)
+
+On first visit to `/admin`, create the initial admin user.
+
+## Useful scripts
+
+| Script | Description |
+| --- | --- |
+| `npm run dev` | Start Next.js + Payload in development |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run generate:types` | Regenerate `src/payload-types.ts` after schema changes |
+| `npm run generate:importmap` | Regenerate the Payload admin import map |
+| `npm run lint` | Run ESLint |
+| `npm run test:int` | Integration tests (Vitest) |
+| `npm run test:e2e` | End-to-end tests (Playwright) |
+
+## Project layout
+
+```txt
+src/
+├── app/
+│   ├── (frontend)/          # Public Next.js routes
+│   └── (payload)/           # Payload admin + REST/GraphQL API
+├── collections/             # Payload collections (Users, Media, …)
+└── payload.config.ts        # Payload config (Postgres adapter)
+.agents/                     # Portable agent context, prompts, and skills
+docker-compose.yml           # Local PostgreSQL
+```
+
+## Agent / AI context
+
+This repo is meant to stay portable across machines and AI tools.
+
+- [AGENTS.md](./AGENTS.md) — entry point for coding agents
+- [.agents/README.md](./.agents/README.md) — index of project instructions and prompts
+- [.cursorrules](./.cursorrules) — Cursor-specific coding rules (same standards as `.agents/prompts/`)
+
+## Collections
+
+- **Users** — auth-enabled collection for the admin panel
+- **Media** — uploads (alt text required)
+
+See the [Payload collections docs](https://payloadcms.com/docs/configuration/collections) when adding new collections.
