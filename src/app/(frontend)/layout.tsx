@@ -1,3 +1,4 @@
+import { SiteFooter } from '@/components/Footer'
 import { SiteHeader } from '@/components/Header'
 import React from 'react'
 
@@ -16,6 +17,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body>
         <SiteHeader />
         <main>{children}</main>
+        <SiteFooter />
       </body>
     </html>
   )

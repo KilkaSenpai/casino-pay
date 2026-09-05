@@ -11,39 +11,31 @@ export function FooterProviders({
   title?: string | null
   items: ProviderItem[]
 }) {
-  if (!title && items.length === 0) {
+  const logos = items.filter((item) => hasRenderableMedia(item.logo))
+
+  if (logos.length === 0) {
     return null
   }
 
   return (
-    <section>
-      {title ? <h2 className="text-[18px] font-bold text-white">{title}</h2> : null}
-      <ul className="mt-5 grid grid-cols-4 gap-x-4 gap-y-5 min-[480px]:grid-cols-6 lg:grid-cols-8">
-        {items.map((item) => {
-          const label = item.name ?? ''
-          const hasLogo = hasRenderableMedia(item.logo)
-
-          if (!hasLogo && !label) {
-            return null
-          }
-
-          return (
-            <li key={item.id ?? label} className="flex items-center justify-center">
-              {hasLogo ? (
-                <MediaImage
-                  media={item.logo}
-                  alt={label}
-                  width={96}
-                  height={32}
-                  className="h-7 w-auto max-w-[96px] object-contain opacity-80"
-                />
-              ) : (
-                <span className="text-[12px] text-[#c8d2dc]">{label}</span>
-              )}
-            </li>
-          )
-        })}
+    <div>
+      {title?.trim() ? <h2 className="text-[18px] font-bold text-white">{title}</h2> : null}
+      <ul className={title?.trim() ? 'mt-5 grid grid-cols-4 gap-x-4 gap-y-5 min-[480px]:grid-cols-6 lg:grid-cols-8' : 'grid grid-cols-4 gap-x-4 gap-y-5 min-[480px]:grid-cols-6 lg:grid-cols-8'}>
+        {logos.map((item) => (
+          <li
+            key={item.id ?? (typeof item.logo === 'object' ? item.logo.id : item.logo)}
+            className="flex items-center justify-center"
+          >
+            <MediaImage
+              media={item.logo}
+              alt=""
+              width={96}
+              height={32}
+              className="h-7 w-auto max-w-[96px] object-contain opacity-80"
+            />
+          </li>
+        ))}
       </ul>
-    </section>
+    </div>
   )
 }

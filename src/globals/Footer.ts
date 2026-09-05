@@ -41,8 +41,53 @@ const linkFields = [
   },
 ] as Field[]
 
+type LogoListItem = {
+  name?: unknown
+  [key: string]: unknown
+}
+
+function stripLogoNames(items: LogoListItem[] | null | undefined): LogoListItem[] | null | undefined {
+  if (!items) {
+    return items
+  }
+
+  return items.map((item) => {
+    const next = { ...item }
+    delete next.name
+    return next
+  })
+}
+
 export const Footer: GlobalConfig = {
   slug: 'footer',
+  hooks: {
+    afterRead: [
+      ({ doc }) => {
+        if (doc.providersSection) {
+          doc.providersSection.providersList = stripLogoNames(doc.providersSection.providersList)
+        }
+
+        if (doc.paymentSection) {
+          doc.paymentSection.paymentLogos = stripLogoNames(doc.paymentSection.paymentLogos)
+        }
+
+        return doc
+      },
+    ],
+    beforeChange: [
+      ({ data }) => {
+        if (data.providersSection) {
+          data.providersSection.providersList = stripLogoNames(data.providersSection.providersList)
+        }
+
+        if (data.paymentSection) {
+          data.paymentSection.paymentLogos = stripLogoNames(data.paymentSection.paymentLogos)
+        }
+
+        return data
+      },
+    ],
+  },
   fields: [
     {
       type: 'tabs',
@@ -65,6 +110,12 @@ export const Footer: GlobalConfig = {
                   type: 'upload',
                   relationTo: 'media',
                   label: 'Disclaimer Logo',
+                },
+                {
+                  name: 'licenseLogo',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'License Logo',
                 },
               ],
             },
@@ -131,10 +182,6 @@ export const Footer: GlobalConfig = {
                   },
                   fields: [
                     {
-                      name: 'name',
-                      type: 'text',
-                    },
-                    {
                       name: 'logo',
                       type: 'upload',
                       relationTo: 'media',
@@ -160,14 +207,10 @@ export const Footer: GlobalConfig = {
                   name: 'paymentLogos',
                   type: 'array',
                   labels: {
-                    singular: 'Payment method',
-                    plural: 'Payment methods',
+                    singular: 'Payment logo',
+                    plural: 'Payment logos',
                   },
                   fields: [
-                    {
-                      name: 'name',
-                      type: 'text',
-                    },
                     {
                       name: 'logo',
                       type: 'upload',

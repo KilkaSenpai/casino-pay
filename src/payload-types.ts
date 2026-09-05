@@ -394,6 +394,7 @@ export interface Footer {
   topDisclaimer: {
     warningText: string;
     regulatorLogo?: (number | null) | Media;
+    licenseLogo?: (number | null) | Media;
   };
   legalBottom: {
     copyright?: string | null;
@@ -415,7 +416,6 @@ export interface Footer {
     title?: string | null;
     providersList?:
       | {
-          name?: string | null;
           logo?: (number | null) | Media;
           id?: string | null;
         }[]
@@ -425,7 +425,6 @@ export interface Footer {
     title?: string | null;
     paymentLogos?:
       | {
-          name?: string | null;
           logo?: (number | null) | Media;
           id?: string | null;
         }[]
@@ -499,6 +498,7 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         warningText?: T;
         regulatorLogo?: T;
+        licenseLogo?: T;
       };
   legalBottom?:
     | T
@@ -527,7 +527,6 @@ export interface FooterSelect<T extends boolean = true> {
         providersList?:
           | T
           | {
-              name?: T;
               logo?: T;
               id?: T;
             };
@@ -539,7 +538,6 @@ export interface FooterSelect<T extends boolean = true> {
         paymentLogos?:
           | T
           | {
-              name?: T;
               logo?: T;
               id?: T;
             };

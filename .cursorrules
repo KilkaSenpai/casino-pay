@@ -7,7 +7,7 @@
 - Layered UI: `src/app` (pages/routes), `src/components`, `src/hooks`, `src/utils`. Details: `.agents/context/frontend.md`.
 - Do not add FSD folders (`widgets`, `features`, `entities`, `shared`) or `src/pages`.
 - Fetch CMS data in a Server Component; presentational pieces only render.
-- Keep a component folder small. Do not extract a 20-line button into its own file.
+- Split a multi-section UI block the same way as `Header/`: `Site*` fetches CMS data, then one file per design section (nav, logos, legal). Do not put a whole page block in one file. Do not extract a 20-line button into its own file.
 - Reusable hooks go in `src/hooks`; pure helpers in `src/utils`.
 - Fetch and compose data in Server Components. Add `'use client'` only for hooks, events, or browser APIs; keep those islands small.
 - Use Payload generated types from `src/payload-types.ts`. Never use `any`.

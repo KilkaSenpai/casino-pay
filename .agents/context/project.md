@@ -43,6 +43,7 @@ Required in `.env` (copy from `.env.example`):
 - Strict TypeScript; do not use `any`; use `src/payload-types.ts`
 - Fetch in Server Components; `'use client'` only for small interactive islands
 - Layered folders only: `app`, `components`, `hooks`, `utils`
+- Multi-section UI (`Header/`, `Footer/`): `Site*` fetches, then one file per design section — same shape as `Header/`
 - Use `CMSLink` from `@/components/CMSLink` for Payload `linkFields`
 - Use Payload v3 APIs only; do not invent collection fields or adapters
 - After collection/field changes, regenerate types

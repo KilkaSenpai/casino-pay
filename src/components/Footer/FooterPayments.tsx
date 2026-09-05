@@ -11,39 +11,31 @@ export function FooterPayments({
   title?: string | null
   items: PaymentItem[]
 }) {
-  if (!title && items.length === 0) {
+  const logos = items.filter((item) => hasRenderableMedia(item.logo))
+
+  if (logos.length === 0) {
     return null
   }
 
   return (
-    <section>
-      {title ? <h2 className="text-[18px] font-bold text-white">{title}</h2> : null}
-      <ul className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-4">
-        {items.map((item) => {
-          const label = item.name ?? ''
-          const hasLogo = hasRenderableMedia(item.logo)
-
-          if (!hasLogo && !label) {
-            return null
-          }
-
-          return (
-            <li key={item.id ?? label} className="flex items-center">
-              {hasLogo ? (
-                <MediaImage
-                  media={item.logo}
-                  alt={label}
-                  width={80}
-                  height={36}
-                  className="h-8 w-auto max-w-[88px] object-contain"
-                />
-              ) : (
-                <span className="text-[13px] text-[#c8d2dc]">{label}</span>
-              )}
-            </li>
-          )
-        })}
+    <div>
+      {title?.trim() ? <h2 className="text-[18px] font-bold text-white">{title}</h2> : null}
+      <ul className={title?.trim() ? 'mt-5 flex flex-wrap items-center gap-x-6 gap-y-4' : 'flex flex-wrap items-center gap-x-6 gap-y-4'}>
+        {logos.map((item) => (
+          <li
+            key={item.id ?? (typeof item.logo === 'object' ? item.logo.id : item.logo)}
+            className="flex items-center"
+          >
+            <MediaImage
+              media={item.logo}
+              alt=""
+              width={80}
+              height={30}
+              className="h-[30px] w-auto max-h-[30px] object-contain"
+            />
+          </li>
+        ))}
       </ul>
-    </section>
+    </div>
   )
 }

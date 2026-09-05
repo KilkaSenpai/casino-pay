@@ -55,6 +55,22 @@ img {
   }
 }
 
+.footer-nav-mobile {
+  interpolate-size: allow-keywords;
+}
+
+.footer-nav-mobile::details-content {
+  height: 0;
+  overflow: hidden;
+  transition:
+    height 0.3s ease-out,
+    content-visibility 0.3s allow-discrete;
+}
+
+.footer-nav-mobile[open]::details-content {
+  height: auto;
+}
+
 .header__nav-link {
   position: relative;
 }
