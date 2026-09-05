@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 :root {
   --font-mono: 'Roboto Mono', monospace;
 }
@@ -10,7 +12,7 @@ html {
   font-size: 18px;
   line-height: 32px;
 
-  background: rgb(0, 0, 0);
+  background: #011c38;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -26,6 +28,7 @@ body {
   line-height: 32px;
 
   margin: 0;
+  background: #011c38;
   color: rgb(1000, 1000, 1000);
 
   @media (max-width: 1024px) {
@@ -38,6 +41,105 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+.header__logo img {
+  width: auto;
+  max-width: none;
+  height: 2.5rem;
+}
+
+@media (max-width: 575px) {
+  .header__logo img {
+    height: 1.75rem;
+  }
+}
+
+.header__nav-link {
+  position: relative;
+}
+
+.header__nav-link::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  background: #f55561;
+  opacity: 0;
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.3s ease-out;
+}
+
+.header__nav-link:hover::after,
+.header__nav-link.is-open::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.header__pages {
+  perspective: 1200px;
+}
+
+.header__page {
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+.header__page--out-next {
+  animation: header-page-out-next 0.35s ease-in forwards;
+}
+
+.header__page--in-next {
+  animation: header-page-in-next 0.35s ease-out forwards;
+}
+
+.header__page--out-prev {
+  animation: header-page-out-prev 0.35s ease-in forwards;
+}
+
+.header__page--in-prev {
+  animation: header-page-in-prev 0.35s ease-out forwards;
+}
+
+@keyframes header-page-out-next {
+  to {
+    transform: translateX(-55%) rotateY(-28deg);
+    opacity: 0;
+  }
+}
+
+@keyframes header-page-in-next {
+  from {
+    transform: translateX(55%) rotateY(28deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes header-page-out-prev {
+  to {
+    transform: translateX(55%) rotateY(28deg);
+    opacity: 0;
+  }
+}
+
+@keyframes header-page-in-prev {
+  from {
+    transform: translateX(-55%) rotateY(-28deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) rotateY(0deg);
+    opacity: 1;
+  }
 }
 
 h1 {
@@ -60,14 +162,6 @@ h1 {
   @media (max-width: 400px) {
     font-size: 32px;
     line-height: 32px;
-  }
-}
-
-p {
-  margin: 24px 0;
-
-  @media (max-width: 1024px) {
-    margin: calc(var(--base) * 0.75) 0;
   }
 }
 

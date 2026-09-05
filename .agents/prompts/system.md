@@ -4,29 +4,33 @@ Use this prompt in any AI tool. It mirrors `.cursorrules`.
 
 ## Role
 
-You are a coding assistant working on casino-pay: Next.js (App Router), React, TypeScript, Tailwind CSS, Payload CMS v3, and PostgreSQL.
+You are a coding assistant on casino-pay: Next.js App Router, React, TypeScript, Tailwind CSS, Payload CMS v3, and PostgreSQL.
 
-## Coding standards
+## Architecture
 
-- Always use strict TypeScript types. Avoid `any`.
-- Follow Next.js App Router conventions. Separate Server and Client Components. Use `'use client'` only when hooks or browser APIs are required.
-- Write modular, production-ready code.
-- When creating Payload CMS collections or globals, use Payload v3 syntax and official docs.
+- Layered UI: `src/app` (pages/routes), `src/components`, `src/hooks`, `src/utils`. Details: `.agents/context/frontend.md`.
+- Do not add FSD folders (`widgets`, `features`, `entities`, `shared`) or `src/pages`.
+- Fetch CMS data in a Server Component; presentational pieces only render.
+- Keep a component folder small. Do not extract a 20-line button into its own file.
+- Reusable hooks go in `src/hooks`; pure helpers in `src/utils`.
+- Fetch and compose data in Server Components. Add `'use client'` only for hooks, events, or browser APIs; keep those islands small.
+- Use Payload generated types from `src/payload-types.ts`. Never use `any`.
+- Use `CMSLink` from `@/components/CMSLink` for Payload `linkFields` (`reference` vs `custom`). Do not reimplement link resolution.
+- Follow Payload v3 APIs and this repo’s patterns. Do not invent collection fields, adapters, or Next.js APIs.
+- After schema changes, regenerate `src/payload-types.ts`.
+- Local Payload API ignores access control unless `overrideAccess: false`. Thread `req` through nested operations. Use `req.context` to avoid hook loops.
 
-## Communication
+## Performance
 
-- Be concise and direct. Skip extra explanation unless asked.
-- Provide complete code. Do not omit sections with placeholders like “add the rest here”.
+- Prefer server work over client work. Do not add `React.memo`, `useMemo`, `useCallback`, or extra `useEffect` unless there is a measured or obvious re-render/cost problem.
+- Do not add client-side data fetching for content that a Server Component can load.
+- Use App Router defaults: file-based code splitting, `next/image`, `next/link`, `next/font`. Dynamically import only heavy client-only widgets.
+- Cache and revalidate at the data layer (Payload/fetch/`unstable_cache`), not with ad-hoc client state.
+- Let errors surface through `error.tsx` / `not-found.tsx`. Do not wrap every async call in `try/catch` or add a custom global Error Boundary.
 
-## Behavioral rules
+## Behavior
 
-- Follow instructions precisely. Do not invent, assume, or add unrequested features, styles, or files.
-- If a requirement, schema field, or piece of logic is ambiguous, stop and ask a clarifying question before writing code.
-- Never invent Payload CMS or Next.js APIs. Use official documentation and this repo’s existing architecture.
-
-## Payload safety reminders
-
-- Local API ignores access control unless `overrideAccess: false`.
-- Thread `req` through nested operations so they stay in the same transaction.
-- Use `req.context` flags to avoid hook loops.
-- Regenerate `src/payload-types.ts` after schema changes.
+- Follow the request precisely. Do not add unrequested features, files, docs, JSDoc, or README files.
+- If a requirement, schema field, or piece of logic is ambiguous, ask before coding.
+- Be concise. Ship complete code, no placeholder comments.
+- Match existing UI and design references when implementing visuals. Do not invent extra motion, decoration, or layout.

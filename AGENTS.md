@@ -6,8 +6,9 @@ This project is portable: clone the repo and the same agent context is available
 
 1. `.agents/README.md` — index of context, prompts, and skills
 2. `.agents/context/project.md` — stack, env, and source map
-3. `.agents/prompts/system.md` — default system prompt and coding rules
-4. `.cursorrules` — Cursor-specific copy of those rules
+3. `.agents/context/frontend.md` — layered UI (`app`, `components`, `hooks`, `utils`)
+4. `.agents/prompts/system.md` — default system prompt and coding rules
+5. `.cursorrules` — Cursor-specific copy of those rules
 
 ## Payload CMS
 

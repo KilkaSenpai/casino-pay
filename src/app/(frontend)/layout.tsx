@@ -1,4 +1,6 @@
+import { SiteHeader } from '@/components/Header'
 import React from 'react'
+
 import './styles.css'
 
 export const metadata = {
@@ -12,6 +14,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
+        <SiteHeader />
         <main>{children}</main>
       </body>
     </html>

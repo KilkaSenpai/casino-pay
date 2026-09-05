@@ -29,15 +29,23 @@ Required in `.env` (copy from `.env.example`):
 
 - `src/payload.config.ts` — Payload config, Postgres adapter, type output
 - `src/collections/` — collection configs
-- `src/app/(frontend)/` — public UI
+- `src/globals/` — global configs (header, footer)
+- `src/app/(frontend)/` — public pages (routes and layouts)
 - `src/app/(payload)/` — admin UI and Payload API routes
+- `src/components/` — UI (Header, CMSLink, Container, icons)
+- `src/hooks/` — reusable React hooks
+- `src/utils/` — pure helpers
 - `src/payload-types.ts` — generated types (`npm run generate:types`)
+- `.agents/context/frontend.md` — layered UI rules
 
 ## Conventions
 
-- Strict TypeScript; do not use `any`
-- Separate Server and Client Components; add `'use client'` only when needed
+- Strict TypeScript; do not use `any`; use `src/payload-types.ts`
+- Fetch in Server Components; `'use client'` only for small interactive islands
+- Layered folders only: `app`, `components`, `hooks`, `utils`
+- Use `CMSLink` from `@/components/CMSLink` for Payload `linkFields`
 - Use Payload v3 APIs only; do not invent collection fields or adapters
 - After collection/field changes, regenerate types
 - Pass `req` through nested Payload operations in hooks
 - Local API bypasses access control unless `overrideAccess: false`
+- Optimize at the data/server layer; do not add memo/docs/error-boundary boilerplate by default
